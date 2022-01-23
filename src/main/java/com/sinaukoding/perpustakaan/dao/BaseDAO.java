@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@SuppressWarnings({"uncheckec","ConstanConditions"})
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public abstract class BaseDAO<T extends BaseEntity<T>> {
+
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -28,114 +29,99 @@ public abstract class BaseDAO<T extends BaseEntity<T>> {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    public T findOne(T param){
+    //Mencari Data by ID
+    public T findOne(T param) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-
         CriteriaQuery<T> query = builder.createQuery(type);
-
         Root<T> root = query.from(type);
-
         query.orderBy(builder.asc(root.get("id")));
-
-        return singleResult(query,predicates(param,builder,root,false));
+        return singleResult(query, predicates(param, builder, root, false));
     }
 
-    public Collection<T> find(T param, int offset, int limit){
+    //Mencari data Rame-rame
+    public Collection<T> find(T param, int offset, int limit) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-
         CriteriaQuery<T> query = builder.createQuery(type);
-
         Root<T> root = query.from(type);
-
-        return listResult(query,predicates(param,builder,root,false),offset,limit);
+        query.orderBy(builder.asc(root.get("id")));
+        return listResult(query, predicates(param, builder, root, false), offset, limit);
     }
 
-    public Long count(T param){
+    //Sebagai penghitung dari list yang ditampilkan
+    public Long count(T param) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
-
-        Root<T> root = query.from(type);
-
+        Root<T> root =  query.from(type);
         query.select(builder.count(root));
-
-        return singleResult(query,predicates(param,builder,root,true));
+        return singleResult(query, predicates(param, builder, root, false));
     }
 
-    public T save(T entity){
-        if(entity != null && entity.getId() == null){
+    //Save Entity
+    public T save(T entity) {
+        if (entity != null && entity.getId() == null) {
             entityManager.persist(entity);
-
             return entity;
         }
-
         return entity;
     }
 
-    public T update(T entity){
-        if(entity != null && entity.getId() != null){
-            T reference = findReference(entity.getId());
 
+    //Update data yang sudah ada
+    public T update(T entity) {
+        if(entity != null && entity.getId() != null) {
+            T reference = findReference(entity.getId());
             entity.setCreatedTime(reference.getCreatedTime());
-
-            if(reference != null){
+            if (reference != null) {
                 entityManager.merge(entity);
-
                 return entity;
             }
         }
-
         return entity;
     }
 
-    public T delete(T entity){
-        if(entity != null && entity.getId() != null){
+
+    //Menghapus Data
+    public T delete(T entity) {
+        if (entity != null && entity.getId()!= null) {
             T reference = findReference(entity.getId());
-
-            if(reference != null){
+            if (reference != null) {
                 entityManager.remove(entity);
-
                 return entity;
             }
         }
-
         return entity;
+
     }
 
-    public T findReference(Long id){
-        return (T) Hibernate.unproxy(entityManager.getReference(type,id));
+    public T findReference(Long id) {
+        return (T) Hibernate.unproxy(entityManager.getReference(type, id));
+
     }
 
-
-
-    public List<Predicate> predicates (T param, CriteriaBuilder builder, Root<T> root, boolean isCount){
+    public List<Predicate> predicates(T param, CriteriaBuilder builder, Root<T> root, boolean isCount){
         return new ArrayList<>();
     }
 
-    public <I> I singleResult(CriteriaQuery<I> query, List<Predicate> predicates){
-        try{
-            query.where(predicates.toArray(new Predicate[0]));
 
-            return  entityManager.createQuery(query).getSingleResult();
-        }catch (NoResultException ignore){
+    public <I> I singleResult(CriteriaQuery<I> query, List<Predicate> predicates) {
+        try {
+            query.where(predicates.toArray(new Predicate[0]));
+            return entityManager.createQuery(query).getSingleResult();
+        } catch (NoResultException ignore) {
 
         }
-
         return null;
     }
 
-    public List<T> listResult(CriteriaQuery<T> query, List<Predicate> predicates, int offset , int limit){
-        query.where(predicates.toArray(new  Predicate[0]));
+    public List<T> listResult(CriteriaQuery<T> query, List<Predicate> predicates, int offset, int limit) {
+        query.where(predicates.toArray(new Predicate[0]));
         query.distinct(true);
-
-        TypedQuery<T> typedQuery = entityManager.createQuery(query);
-
-        if(limit != Integer.MAX_VALUE){
-            typedQuery.setMaxResults(limit);
+        TypedQuery<T> typeQuery = entityManager.createQuery(query);
+        if (limit != Integer.MAX_VALUE) {
+            typeQuery.setMaxResults(limit);
         }
 
-        return typedQuery.setFirstResult(offset).getResultList();
-
+        return typeQuery.setFirstResult(offset).getResultList();
     }
 
 }

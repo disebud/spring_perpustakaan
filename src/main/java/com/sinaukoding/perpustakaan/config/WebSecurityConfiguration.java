@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -26,20 +25,23 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public WebSecurityConfiguration() {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    public AuthenticationManager authenticationManagerBean()throws Exception {
+        return super.authenticationManagerBean();
 
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception{
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/books").permitAll()
+                .authorizeRequests().antMatchers("/books/**","/loans/**").permitAll()
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-
     }
 }
+
+

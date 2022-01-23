@@ -2,11 +2,14 @@ package com.sinaukoding.perpustakaan.service;
 
 import com.sinaukoding.perpustakaan.dao.BaseDAO;
 import com.sinaukoding.perpustakaan.entity.BaseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
-public abstract class BaseService < T extends BaseEntity<T>> {
+
+@Service
+public abstract class BaseService<T extends BaseEntity<T>> {
 
     protected abstract BaseDAO<T> getDAO();
 
@@ -16,26 +19,24 @@ public abstract class BaseService < T extends BaseEntity<T>> {
     }
 
     @Transactional(readOnly = true)
-    public Collection<T> find(T param, int offset,int limit){
-        return getDAO().find(param,offset,limit);
+    public Collection<T> find(T param, int offset, int limit){
+        return getDAO().find(param, offset, limit);
     }
 
-    @Transactional(readOnly = true)
-    public Long count(T param){
+    public long count(T param) {
         return getDAO().count(param);
     }
 
     @Transactional
-    public T save (T entity){
+    public T save(T entity){
         return getDAO().save(entity);
     }
 
     @Transactional
     public T update(T entity){
-        if(entity.getId() != null){
+        if (entity.getId() != null){
             return getDAO().update(entity);
         }
-
         return null;
     }
 

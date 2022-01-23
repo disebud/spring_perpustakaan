@@ -18,35 +18,72 @@ public class BookController extends BaseController {
     private BookService service;
 
     @GetMapping
-    public RestResult get(@RequestParam(value = "param",required = false) String param,
-                          @RequestParam(value = "offset") int offset,
-                          @RequestParam(value = "limit") int limit) throws JsonProcessingException {
-
+    public RestResult get(@RequestParam(value = "param", required = false) String param,
+                          @RequestParam(value = "offset")int offset,
+                          @RequestParam(value = "limit")int limit) throws JsonProcessingException{
         Book book = param != null ? new ObjectMapper().readValue(param,Book.class) : null;
+//        Book book = param != null ? new ObjectMapper().readValues(param, Book.class) : null;
 
-        Long rows = service.count(book);
+        long rows = service.count(book);
 
-        return new RestResult(rows > 0 ? service.find(book,offset,limit) : new ArrayList<>());
-
+        return new RestResult(rows > 0 ? service.find(book, offset, limit) : new ArrayList<>(),rows);
+//        return new RestResult(rows > 0 ? service.find(book, offset, limit) : new ArrayList<>());
     }
 
     @PostMapping
     public RestResult save(@RequestBody Book param){
         param = service.save(param);
-
         return new RestResult(param, param != null ? StatusCode.SAVE_SUCCESS : StatusCode.SAVE_FAILED);
+
     }
-
     @PutMapping
-    public  RestResult update(@RequestBody Book book){
+    public RestResult update(@RequestBody Book book) {
         book = service.update(book);
-
         return new RestResult(book, book != null ? StatusCode.UPDATE_SUCCESS : StatusCode.UPDATE_FAILED);
     }
 
     @DeleteMapping(value = "{id}")
-    public RestResult delete(@PathVariable Long id){
+    public RestResult delete(@PathVariable long id){
         return new RestResult(service.delete(id) ? StatusCode.DELETE_SUCCESS : StatusCode.DELETE_FAILED);
     }
-
 }
+
+//@RestController
+//@RequestMapping("books")
+//public class BookController extends BaseController {
+//    @Autowired
+//    private BookService service;
+//
+//    @GetMapping
+//    public RestResult get(@RequestParam(value = "param",required = false) String param,
+//                          @RequestParam(value = "offset") int offset,
+//                          @RequestParam(value = "limit") int limit) throws JsonProcessingException {
+//
+//        Book book = param != null ? new ObjectMapper().readValue(param,Book.class) : null;
+//
+//        Long rows = service.count(book);
+//
+//        return new RestResult(rows > 0 ? service.find(book,offset,limit) : new ArrayList<>());
+//
+//    }
+//
+//    @PostMapping
+//    public RestResult save(@RequestBody Book param){
+//        param = service.save(param);
+//
+//        return new RestResult(param, param != null ? StatusCode.SAVE_SUCCESS : StatusCode.SAVE_FAILED);
+//    }
+//
+//    @PutMapping
+//    public  RestResult update(@RequestBody Book book){
+//        book = service.update(book);
+//
+//        return new RestResult(book, book != null ? StatusCode.UPDATE_SUCCESS : StatusCode.UPDATE_FAILED);
+//    }
+//
+//    @DeleteMapping(value = "{id}")
+//    public RestResult delete(@PathVariable Long id){
+//        return new RestResult(service.delete(id) ? StatusCode.DELETE_SUCCESS : StatusCode.DELETE_FAILED);
+//    }
+//
+//}
