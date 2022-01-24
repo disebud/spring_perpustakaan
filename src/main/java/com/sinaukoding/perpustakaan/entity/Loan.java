@@ -1,6 +1,7 @@
 package com.sinaukoding.perpustakaan.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,11 @@ import java.util.Date;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Loan  extends  BaseEntity<Loan>{
 
-    private static final long serialVersionUID = 6170374343097601929L;
+public class Loan extends BaseEntity<Loan> {
+
+
+    private static final long serialVersionUID = -7654667046791236601L;
 
     public enum StatusLoan{
         BORROWED,
@@ -23,13 +26,13 @@ public class Loan  extends  BaseEntity<Loan>{
     }
 
     @Column(name = "type_identity")
-    private  String typeIdentity;
+    private String typeIdentity;
 
     @Column(name = "number_identity")
-    private  String numberIdentity;
+    private String numberIdentity;
 
     @Column(name = "duration")
-    private  Integer duration;
+    private Integer duration;
 
     @Column(name = "loan_date")
     @Temporal(TemporalType.DATE)
@@ -43,17 +46,13 @@ public class Loan  extends  BaseEntity<Loan>{
     @Enumerated(EnumType.STRING)
     private StatusLoan status = StatusLoan.BORROWED;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-
-
-
-
-
 }

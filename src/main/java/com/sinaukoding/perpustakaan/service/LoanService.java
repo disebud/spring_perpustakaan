@@ -13,7 +13,6 @@ import java.util.Date;
 
 @Service
 public class LoanService extends BaseService<Loan> {
-
     @Autowired
     private LoanDAO dao;
 
@@ -25,14 +24,15 @@ public class LoanService extends BaseService<Loan> {
     @Transactional
     public Loan save(Loan entity){
         entity.setLoanDate(new Date());
+//        entity.setUser(PerpustakaanApplication.getCurrentUser());
 
         return dao.save(entity);
-
     }
 
+
     @Transactional
-    public Loan update(Loan entity){
-        if(entity.getId() != null){
+    public Loan update(Loan entity) {
+        if (entity.getId() != null) {
             Loan reference = getDAO().findReference(entity.getId());
 
             reference.setReturnDate(entity.getReturnDate() != null
@@ -49,13 +49,13 @@ public class LoanService extends BaseService<Loan> {
 
             return entity;
         }
-
         return null;
     }
 
     @Transactional
-    public Collection<Loan> findByDate(Loan entity, Date startDate, Date endDate){
-        Collection<Loan> result = dao.findByDate(entity,startDate,endDate);
+    public Collection<Loan> findByDate(Loan entity, Date startDate, Date endDate) {
+        Collection<Loan> result = dao.findByDate(entity, startDate, endDate);
+
         return result.size() > 0 ? result : new ArrayList<>();
     }
 

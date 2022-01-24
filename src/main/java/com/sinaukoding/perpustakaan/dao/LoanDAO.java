@@ -14,11 +14,11 @@ public class LoanDAO extends BaseDAO<Loan> {
     public List<Predicate> predicates(Loan param, CriteriaBuilder builder, Root<Loan> root, boolean isCount) {
         List<Predicate> predicates = super.predicates(param, builder, root, isCount);
 
-//        if (param != null){
-//            if(param.getStatus() != null){
-//                predicates.add(builder.equal(root.get("status"), param.getStatus()));
-//            }
-//        }
+        if (param != null){
+            if(param.getStatus() != null){
+                predicates.add(builder.equal(root.get("status"), param.getStatus()));
+            }
+        }
 
 
         if (isCount){

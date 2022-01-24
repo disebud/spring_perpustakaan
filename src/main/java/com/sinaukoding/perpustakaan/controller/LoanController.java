@@ -9,6 +9,7 @@ import com.sinaukoding.perpustakaan.entity.Loan;
 import com.sinaukoding.perpustakaan.service.LoanService;
 import com.sinaukoding.perpustakaan.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class LoanController extends BaseController{
     @Autowired
     private LoanService service;
 
+    @PreAuthorize("permitAll()")
     @GetMapping
     public RestResult find(@RequestParam(value = "param", required = false) String param,
                            @RequestParam(value = "offset") int offset,
@@ -31,6 +33,7 @@ public class LoanController extends BaseController{
         return new RestResult ( rows > 0 ? service.find(loan, offset, limit) : new ArrayList<>(), rows);
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping(value = "by-date")
     public RestResult findByDate(@RequestParam(value = "param", required = false) String param,
                                  @RequestParam(value = "start-date") String startDate,
@@ -45,6 +48,7 @@ public class LoanController extends BaseController{
         return result;
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping
     public RestResult save(@RequestBody Loan entity) {
         RestResult result = new RestResult(StatusCode.OPERATION_FAILED);
@@ -57,6 +61,7 @@ public class LoanController extends BaseController{
     }
 
 
+    @PreAuthorize("permitAll()")
     @PutMapping
     public RestResult update(@RequestBody Loan entity) {
         RestResult result = new RestResult(StatusCode.OPERATION_FAILED);
@@ -68,10 +73,10 @@ public class LoanController extends BaseController{
         return result;
     }
 
+    @PreAuthorize("permitAll()")
     @DeleteMapping(value = "{id}")
     public RestResult delete(@PathVariable Long id) {
         return new RestResult(service.delete(id) ? StatusCode.DELETE_SUCCESS : StatusCode.DELETE_FAILED);
     }
-
 
 }
