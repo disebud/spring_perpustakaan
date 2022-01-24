@@ -44,7 +44,7 @@ public class Loan extends BaseEntity<Loan> {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private StatusLoan status = StatusLoan.BORROWED;
+    private StatusLoan status ;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY)

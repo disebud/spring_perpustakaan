@@ -26,11 +26,15 @@ public class User extends BaseEntity<User> {
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
-    @Column(name = "profile_name",columnDefinition = "VARCHAR(100)",nullable = false)
-    private String profileName;
+////    @Column(name = "profile_name",columnDefinition = "VARCHAR(100)",nullable = false)
+//    @Column(name = "profilename",columnDefinition = "VARCHAR(100)",nullable = false)
+//    private String profilename;
+
+    @Column(name = "profilename", columnDefinition = "VARCHAR(100)", nullable = false )
+    private String profilename;
 
     @Column(name = "username",columnDefinition = "VARCHAR(50)",nullable = false)
-    private String userName;
+    private String username;
 
     @Column(name = "password",nullable = false)
     private String password;
@@ -41,4 +45,7 @@ public class User extends BaseEntity<User> {
     @Column(name = "token")
     private String token;
 
+    public User(String username) {
+        this.username = username;
+    }
 }
