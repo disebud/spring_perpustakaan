@@ -30,7 +30,7 @@ public class User extends BaseEntity<User> {
 //    @Column(name = "profilename",columnDefinition = "VARCHAR(100)",nullable = false)
 //    private String profilename;
 
-    @Column(name = "profilename", columnDefinition = "VARCHAR(100)", nullable = false )
+    @Column(name = "profile_name", columnDefinition = "VARCHAR(100)", nullable = false )
     private String profilename;
 
     @Column(name = "username",columnDefinition = "VARCHAR(50)",nullable = false)

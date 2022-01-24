@@ -43,7 +43,7 @@ public class LoanDAO extends BaseDAO<Loan> {
         query.orderBy(builder.asc(root.get("id")));
 
         root.fetch("book", JoinType.INNER);
-        root.fetch("user", JoinType.LEFT);
+        root.fetch("user", JoinType.INNER);
 
         TypedQuery<Loan> typedQuery = entityManager.createQuery(query);
 

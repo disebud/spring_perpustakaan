@@ -50,7 +50,7 @@ public class UserService extends BaseService<User>{
 
         User currentUser = dao.findOne(param);
 
-        if(currentUser != null){
+        if(currentUser == null){
             return result;
         }else if(currentUser.getPassword() != null && BCrypt.checkpw(param.getPassword(),currentUser.getPassword())){
             UserDetails userDetails = new org.springframework.security.core.userdetails.User(currentUser.getUsername(),currentUser.getPassword(), new ArrayList<>());

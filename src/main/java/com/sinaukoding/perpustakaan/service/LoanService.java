@@ -1,5 +1,6 @@
 package com.sinaukoding.perpustakaan.service;
 
+import com.sinaukoding.perpustakaan.PerpustakaanApplication;
 import com.sinaukoding.perpustakaan.dao.BaseDAO;
 import com.sinaukoding.perpustakaan.dao.LoanDAO;
 import com.sinaukoding.perpustakaan.entity.Loan;
@@ -24,7 +25,7 @@ public class LoanService extends BaseService<Loan> {
     @Transactional
     public Loan save(Loan entity){
         entity.setLoanDate(new Date());
-//        entity.setUser(PerpustakaanApplication.getCurrentUser());
+        entity.setUser(PerpustakaanApplication.getCurreentUser());
 
         return dao.save(entity);
     }
